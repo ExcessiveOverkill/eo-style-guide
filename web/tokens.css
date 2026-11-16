@@ -8,18 +8,18 @@
   --ax-font-title: 'Roboto Condensed', 'Roboto', sans-serif;
   --ax-font-mono: 'Roboto Mono', ui-monospace, Menlo, monospace;
 
-  --ax-bg: #0e0f10;
-  --ax-panel: #141516;
-  --ax-border: #2a2c2f;
-  --ax-border-strong: #3a3c3f;
-  --ax-rule: #222426;
-  --ax-grid: #26282b;
-  --ax-axis: #4a4c4e;
-  --ax-ink: #e4e1d8;
-  --ax-muted: #8a877e;
-  --ax-accent: #e2683c;
-  --ax-accent-rgb: 226, 104, 60;
-  --ax-on-accent: #0e0f10;
+  --ax-bg: #000000;
+  --ax-panel: #0a0a0a;
+  --ax-border: #2b2b2b;
+  --ax-border-strong: #3d3d3d;
+  --ax-rule: #1c1c1c;
+  --ax-grid: #1f1f1f;
+  --ax-axis: #4d4d4d;
+  --ax-ink: #ffffff;
+  --ax-muted: #8f8f8f;
+  --ax-accent: #ffffff;
+  --ax-accent-rgb: 255, 255, 255;
+  --ax-on-accent: #000000;
   /* EO mark as a mask, so it can take any color (see .ax-logo). Same shape as assets/logo/eo-mark-white.svg */
   --ax-mark: url("data:image/svg+xml,%3Csvg width=%22782%22 height=%22781%22 viewBox=%220 0 782 781%22 fill=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22%3E %3Cpath fill-rule=%22evenodd%22 clip-rule=%22evenodd%22 d=%22M367.19 1.253C273.819 6.60782 180.45 48.9808 114.143 116.095C35.9928 195.195 -4.22573 301.177 1.70223 412.396C10.6111 579.522 127.295 723.133 289.952 767.162C396.27 795.942 510.368 777.832 603.85 717.34C695.88 657.787 760.008 558.647 776.587 450.292C779.163 433.458 782.36 398.249 782.114 389.442C781.691 374.363 779.076 346.486 776.605 330.708C748.055 148.426 595.867 11.1954 411.071 1.10061C399.994 0.495282 389.28 0.0709179 387.262 0.156637C385.243 0.242357 376.211 0.736567 367.19 1.253ZM371.952 33.8719C325.122 35.8974 275.121 49.2083 230.416 71.5515C83.8218 144.815 6.10111 310.064 42.8297 470.399C72.7298 600.923 171.884 702.68 302.112 736.485C366.232 753.13 434.848 751.32 498.406 731.308C682.758 673.262 787.807 478.673 734.951 293.14C693.973 149.305 568.929 46.7394 419.571 34.454C408.513 33.5449 396.846 32.8867 393.645 32.9925C390.444 33.0983 380.682 33.4941 371.952 33.8719ZM120.894 390.765L121.162 574.109H160.315H199.468L199.736 390.765L200.003 207.42H160.315H120.627L120.894 390.765ZM222.219 238.639V269.858H289.04H355.861L355.201 257.952C354.838 251.405 354.269 238.903 353.937 230.173C353.604 221.442 353.095 212.751 352.806 210.859L352.28 207.42H287.25H222.219V238.639ZM464.544 208.528C441.083 210.929 422.715 219.373 410.442 233.398C403.927 240.842 399.77 248.977 396.616 260.447L394.174 269.329V390.5C394.174 505.912 394.269 512.048 396.178 519.608C400.335 536.068 409.907 550.405 422.411 558.897C438.106 569.555 454.407 573.319 489.123 574.297L513.22 574.976V543.211V511.446L499.635 510.896C484.211 510.27 479.703 508.584 475.042 501.698L472.48 497.914V390.952V283.99L475.391 279.591C479.969 272.673 484.645 270.886 500.087 270.156L513.22 269.536V238.478V207.42L492.85 207.568C481.647 207.65 468.909 208.081 464.544 208.528ZM535.442 238.338V269.55L548.466 270.113C568.495 270.977 574.085 274.674 576.709 288.786C578.221 296.918 578.139 484.397 576.619 492.692C574.04 506.781 568.867 510.188 548.934 510.924L535.442 511.423V543.199V574.976L559.824 574.289C578.153 573.773 586.882 573.057 594.983 571.406C627.273 564.825 645.536 548.19 653.011 518.55L655.546 508.497V389.971V271.445L653.106 262.571C646.551 238.728 633.392 223.477 612.161 215.115C598.141 209.593 589.517 208.341 561.103 207.703L535.442 207.126V238.338ZM222.219 390.5V419.073H274.599H326.979V390.5V361.927H274.599H222.219V390.5ZM222.219 542.89V574.638H287.233H352.246L352.796 570.141C353.288 566.112 355.562 519.43 355.554 513.523L355.55 511.142H288.885H222.219V542.89Z%22 fill=%22white%22/%3E %3C/svg%3E");
   --ax-glow: 0 0 14px rgba(var(--ax-accent-rgb), 0.28);
@@ -46,15 +46,15 @@
 [data-mode="light"] {
   --ax-bg: #ffffff;
   --ax-panel: #ffffff;
-  --ax-border: #d4d4d0;
+  --ax-border: #d0d0d0;
   --ax-border-strong: #0b0b0b;
-  --ax-rule: #e6e6e3;
-  --ax-grid: #e6e6e3;
+  --ax-rule: #e6e6e6;
+  --ax-grid: #e6e6e6;
   --ax-axis: #0b0b0b;
   --ax-ink: #0b0b0b;
-  --ax-muted: #5f5f5a;
-  --ax-accent: #c4532a;
-  --ax-accent-rgb: 196, 83, 42;
+  --ax-muted: #595959;
+  --ax-accent: #000000;
+  --ax-accent-rgb: 0, 0, 0;
   --ax-on-accent: #ffffff;
   --ax-glow: none;
 
@@ -106,9 +106,9 @@
 .ax-panel::before, .ax-tile::before { content: ""; position: absolute; top: -1px; left: -1px; width: 8px; height: 8px; border-top: 2px solid var(--ax-accent); border-left: 2px solid var(--ax-accent); }
 .ax-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--ax-gap); margin-bottom: var(--ax-gap); }
 .ax-tile { padding: 14px 16px; }
-.ax-value { font: 500 32px/1 var(--ax-font-mono); margin-top: 6px; color: var(--ax-accent); text-shadow: var(--ax-glow); transition: color 0.6s; }
+.ax-value { width: fit-content; font: 500 32px/1 var(--ax-font-mono); margin-top: 6px; color: var(--ax-accent); text-shadow: var(--ax-glow); transition: background-color 0.6s; }
 .ax-value small { font-size: 0.45em; color: var(--ax-muted); margin-left: 4px; font-weight: 400; text-shadow: none; }
-.ax-value.changed { color: var(--ax-ink); transition: none; }
+.ax-value.changed { background-color: rgba(var(--ax-accent-rgb), 0.14); transition: none; }
 .ax-sub { font: 12px var(--ax-font-mono); color: var(--ax-muted); margin-top: 4px; }
 .ax-grid { display: grid; gap: var(--ax-gap); margin-bottom: var(--ax-gap); }
 
@@ -192,7 +192,7 @@
 .ax-viewport { position: relative; min-height: 360px; background:
   radial-gradient(ellipse at 50% 40%, rgba(var(--ax-accent-rgb), 0.05), transparent 60%), var(--ax-panel); overflow: hidden; }
 .ax-viewport canvas { display: block; }
-.ax-3d-label { font: 500 10px var(--ax-font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ax-muted); background: rgba(14, 15, 16, 0.7); padding: 2px 5px; white-space: nowrap; }
+.ax-3d-label { font: 500 10px var(--ax-font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ax-muted); background: rgba(0, 0, 0, 0.7); padding: 2px 5px; white-space: nowrap; }
 [data-mode="light"] .ax-3d-label { background: rgba(255, 255, 255, 0.8); }
 .ax-viewport-hint { position: absolute; right: 12px; bottom: 10px; font: 10px var(--ax-font-mono); color: var(--ax-muted); letter-spacing: 0.08em; text-transform: uppercase; pointer-events: none; }
 
@@ -215,12 +215,12 @@
 .ax-collage-wall:hover .ax-collage-tile:not(:hover) img { filter: grayscale(1) brightness(0.55); }
 @keyframes ax-tile-in { from { opacity: 0; transform: translateZ(-260px) rotateX(-20deg); } }
 
-.ax-lightbox { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; background: rgba(8, 8, 9, 0.88);
+.ax-lightbox { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; background: rgba(0, 0, 0, 0.9);
   backdrop-filter: none; cursor: zoom-out; animation: ax-fade 0.18s ease-out; }
 .ax-lightbox.closing { animation: ax-fade 0.18s ease-in reverse forwards; }
 .ax-lightbox figure { margin: 0; max-width: 86vw; animation: ax-pop 0.3s var(--ax-ease); }
 .ax-lightbox img { max-width: 86vw; max-height: 78vh; display: block; border: 1px solid var(--ax-border); }
-.ax-lightbox figcaption { margin-top: 8px; font: 12px var(--ax-font-mono); color: #8a877e; }
+.ax-lightbox figcaption { margin-top: 8px; font: 12px var(--ax-font-mono); color: var(--ax-muted); }
 .ax-lightbox figcaption b { color: var(--ax-accent); font-weight: 500; }
 @keyframes ax-fade { from { opacity: 0; } }
 @keyframes ax-pop { from { transform: scale(0.94) translateY(8px); opacity: 0; } }

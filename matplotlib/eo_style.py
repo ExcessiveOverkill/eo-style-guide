@@ -27,14 +27,14 @@ for _f in (HERE.parent / "fonts").glob("*.ttf"):
 
 PALETTE = {
     "dark": {
-        "bg": "#0e0f10", "panel": "#141516", "ink": "#e4e1d8", "muted": "#8a877e",
-        "grid": "#26282b", "accent": "#e2683c",
+        "bg": "#000000", "panel": "#0a0a0a", "ink": "#ffffff", "muted": "#8f8f8f",
+        "grid": "#1f1f1f", "accent": "#ffffff",
         "series": ["#2f62e8", "#e03a2f", "#0f9a66", "#a45ee0", "#1a9cc0", "#d9539a"],
         "good": "#4fbf5a", "warning": "#e6c229", "critical": "#ff5a4a", "off": "#5a5c5e",
     },
     "light": {
-        "bg": "#ffffff", "panel": "#ffffff", "ink": "#0b0b0b", "muted": "#5f5f5a",
-        "grid": "#e6e6e3", "accent": "#c4532a",
+        "bg": "#ffffff", "panel": "#ffffff", "ink": "#0b0b0b", "muted": "#595959",
+        "grid": "#e6e6e6", "accent": "#000000",
         "series": ["#1f4fd8", "#e3241b", "#0f8a5f", "#8a3fd1", "#0e7fa3", "#c2307a"],
         "good": "#1d8a3e", "warning": "#b58900", "critical": "#d42a1c", "off": "#9a9a95",
     },

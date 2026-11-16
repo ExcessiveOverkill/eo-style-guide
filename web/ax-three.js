@@ -12,7 +12,7 @@
 //   v.onFrame(dt => { ... });
 //
 // Look: flat dark solids, thin ink edges like a CAD drawing, dashed floor grid,
-// a labeled XYZ triad, terracotta glow on whatever the mouse is over.
+// a labeled XYZ triad, accent glow on whatever the mouse is over.
 
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';

@@ -5,25 +5,25 @@ font.family: sans-serif
 font.sans-serif: Roboto, Helvetica Neue, Arial, DejaVu Sans
 font.monospace: Roboto Mono, Menlo, DejaVu Sans Mono
 font.size: 10
-text.color: e4e1d8
+text.color: ffffff
 
-figure.facecolor: 0e0f10
-figure.edgecolor: 0e0f10
+figure.facecolor: 000000
+figure.edgecolor: 000000
 figure.dpi: 120
-savefig.facecolor: 0e0f10
-savefig.edgecolor: 0e0f10
+savefig.facecolor: 000000
+savefig.edgecolor: 000000
 savefig.dpi: 200
 savefig.bbox: tight
 
-axes.facecolor: 141516
-axes.edgecolor: 4a4c4e
-axes.labelcolor: e4e1d8
+axes.facecolor: 0a0a0a
+axes.edgecolor: 4d4d4d
+axes.labelcolor: ffffff
 axes.labelsize: 9
 axes.titlesize: 10
 axes.titleweight: medium
 axes.titlelocation: left
 axes.titlepad: 10
-axes.titlecolor: e4e1d8
+axes.titlecolor: ffffff
 axes.spines.top: False
 axes.spines.right: False
 axes.spines.left: False
@@ -32,12 +32,12 @@ axes.grid.axis: y
 axes.axisbelow: True
 axes.prop_cycle: cycler('color', ['2f62e8', 'e03a2f', '0f9a66', 'a45ee0', '1a9cc0', 'd9539a'])
 
-grid.color: 26282b
+grid.color: 1f1f1f
 grid.linestyle: (0, (2, 4))
 grid.linewidth: 0.8
 
-xtick.color: 8a877e
-ytick.color: 8a877e
+xtick.color: 8f8f8f
+ytick.color: 8f8f8f
 xtick.labelsize: 8.5
 ytick.labelsize: 8.5
 ytick.left: False
@@ -53,6 +53,6 @@ patch.linewidth: 0
 
 legend.frameon: False
 legend.fontsize: 8.5
-legend.labelcolor: 8a877e
+legend.labelcolor: 8f8f8f
 legend.handlelength: 1.0
 legend.handleheight: 1.0

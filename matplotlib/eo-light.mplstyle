@@ -32,12 +32,12 @@ axes.grid.axis: y
 axes.axisbelow: True
 axes.prop_cycle: cycler('color', ['1f4fd8', 'e3241b', '0f8a5f', '8a3fd1', '0e7fa3', 'c2307a'])
 
-grid.color: e6e6e3
+grid.color: e6e6e6
 grid.linestyle: (0, (2, 4))
 grid.linewidth: 0.8
 
-xtick.color: 5f5f5a
-ytick.color: 5f5f5a
+xtick.color: 595959
+ytick.color: 595959
 xtick.labelsize: 8.5
 ytick.labelsize: 8.5
 ytick.left: False
@@ -53,6 +53,6 @@ patch.linewidth: 0
 
 legend.frameon: False
 legend.fontsize: 8.5
-legend.labelcolor: 5f5f5a
+legend.labelcolor: 595959
 legend.handlelength: 1.0
 legend.handleheight: 1.0

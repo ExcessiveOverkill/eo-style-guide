@@ -2,7 +2,7 @@
 
 # eo-style-guide
 
-The Excessive Overkill visual style for test and demo tooling: control panels, charts, 3D viewers, and bench reports. Dark instrument-panel layout, Roboto type, a terracotta accent, saturated blue/red/green chart colors, the EO mark on every page, and a few small motion touches (a spinner on anything running, a hover effect on each screen's main control, readouts that flash when they change).
+The Excessive Overkill visual style for test and demo tooling: control panels, charts, 3D viewers, and bench reports. Dark instrument-panel layout, Roboto type, white highlights, dark gray separators, saturated blue/red/green chart colors, the EO mark on every page, and a few small motion touches (a spinner on anything running, a hover effect on each screen's main control, readouts that flash when they change).
 
 It is packaged as a skill so AI coding agents apply it without being reminded, and as plain files you can use with no agent at all.
 
@@ -11,6 +11,10 @@ It is packaged as a skill so AI coding agents apply it without being reminded, a
 | 3D arm with live joint control | Photo collage |
 |---|---|
 | ![3D arm](docs/arm-3d.png) | ![Collage](docs/collage.png) |
+
+Tkinter version of the same panel (`tk/example_panel.py`):
+
+![Tk panel](docs/tk-panel.png)
 
 matplotlib output, dark mode:
 
@@ -25,6 +29,7 @@ matplotlib output, dark mode:
 | `assets/logo/` | EO mark (white and on-light variants, SVG and PNG) and the EXCESSIVE OVERKILL wordmark |
 | `web/` | `tokens.css` plus four small scripts: spinners and hover effects, SVG charts, a three.js viewport, an image collage |
 | `examples/` | A telemetry panel, a 3D robot arm, a motion demo, and a photo collage |
+| `tk/` | `eo_tk.py`, a ttk theme plus EO widgets (Header, Panel, Tile, Status, Spinner, Table), and a full example panel |
 | `matplotlib/` | Dark and light style sheets and `eo_style.py` |
 | `fonts/` | Roboto, Roboto Condensed, and Roboto Mono (OFL), so matplotlib needs no font install |
 
@@ -71,7 +76,7 @@ For Cursor, the same text works as a rule in `.cursor/rules/eo-style.mdc` with `
 
 Web: link `web/tokens.css` and `web/ax-fx.js`, put `class="ax"` on `<body>`, and copy pieces from `examples/`. The CSS and JS keep the short `ax` prefix.
 
-Python:
+Python (matplotlib):
 
 ```python
 import sys; sys.path.insert(0, "path/to/eo-style-guide/matplotlib")
@@ -82,13 +87,30 @@ eo.logo(fig)                # EO mark in the corner; wordmark=True for the full 
 eo.save(fig, "out.png")     # refuses to save if any axis is unlabeled
 ```
 
+Python (tkinter):
+
+```python
+import sys; sys.path.insert(0, "path/to/eo-style-guide/tk")
+import tkinter as tk, eo_tk as eo
+
+root = tk.Tk()
+eo.apply(root, "dark")            # ttk theme, Roboto fonts, EO window icon, dark title bar; "light" for print
+head = eo.Header(root, "Servo test", ["run 12", "fw 0.9.4"]); head.pack(fill="x", padx=24, pady=20)
+go = eo.button(head.controls, "Start run", kind="primary"); go.pack()
+tile = eo.Tile(root, "Bus voltage", "V"); tile.pack(); tile.set(24.13, digits=2)
+eo.Footer(root, "bench panel").pack(fill="x", side="bottom")
+root.mainloop()
+```
+
+Everything else is plain `ttk` (Entry, Combobox, Scale, Checkbutton, Notebook, Treeview) and picks up the theme automatically. Helpers: `eo.busy(btn, True, "Homing")` for a running button, `eo.Spinner`, `eo.Status` (square plus word, `live` breathes), `eo.Table` (hover rows), `eo.embed_figure()` for matplotlib charts, `eo.px()` for DPI-scaled sizes. Run `python tk/example_panel.py` to see all of it. On Windows the bundled Roboto fonts load automatically; elsewhere install them from `fonts/` or Tk falls back to system fonts.
+
 ## Branding
 
 - The EO mark leads every page title (`h1`), drawn as a CSS mask in the accent color. `<span class="ax-logo"></span>` places it anywhere; add `ink` for the text color.
 - The wordmark goes in the footer: `<footer class="ax-foot"><img class="ax-wordmark" src="assets/logo/eo-wordmark-white.png" alt="Excessive Overkill"></footer>`. Light mode inverts it automatically.
 - matplotlib figures get the mark with `eo.logo(fig)`.
 
-The logos are monochrome. The terracotta accent (`#e2683c` dark, `#c4532a` light) and the chart series colors are inherited defaults, not brand colors. To change them, edit `tokens.json` first, then copy the values into `web/tokens.css`, `matplotlib/eo_style.py`, and both `.mplstyle` files. Check new chart colors for colorblind separation before you commit to them (Anthropic's dataviz skill ships a `validate_palette.js` for this).
+Brand colors are black, white, and dark gray, matching the logos. The accent is white (black in light mode), so the only hue in any screen comes from chart series and status colors. To change anything, edit `tokens.json` first, then copy the values into `web/tokens.css`, `matplotlib/eo_style.py`, both `.mplstyle` files, and `tk/eo_tk.py`. Check new chart colors for colorblind separation before you commit to them (Anthropic's dataviz skill ships a `validate_palette.js` for this).
 
 ## Credits and license
 

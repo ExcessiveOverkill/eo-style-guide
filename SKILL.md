@@ -5,7 +5,7 @@ description: Excessive Overkill (EO) house style for anything with a chart, grap
 
 # eo-style
 
-Dark instrument-panel UI with saturated Swiss-poster chart colors. Roboto type, square corners, flat surfaces, a terracotta accent on live readouts and the one main action. The interface feels alive: things that are working show a spinner, the main control reacts when the mouse comes near it, and numbers flash when they change.
+Black instrument-panel UI: white text and highlights, dark gray rules, and saturated Swiss-poster chart colors as the only hue. Roboto type, square corners, flat surfaces, white as the accent on live readouts and the one main action, dark gray for separation. The interface feels alive: things that are working show a spinner, the main control reacts when the mouse comes near it, and numbers flash when they change.
 
 Everything lives in this skill's folder, the directory that holds this SKILL.md (call it `<skill>` below):
 
@@ -23,6 +23,8 @@ Everything lives in this skill's folder, the directory that holds this SKILL.md 
 | `examples/fx.html` | Every hover effect and spinner on one page |
 | `matplotlib/eo_style.py` | `use()`, `title()`, `label_lines()`, `bars()`, `ref_line()`, `logo()`, `save()` |
 | `assets/logo/` | EO mark (white SVG/PNG, black-disc SVG for light backgrounds, black PNG) and the EXCESSIVE OVERKILL wordmark (white PNG) |
+| `tk/eo_tk.py` | tkinter/ttk theme and widgets: `apply()`, `Header`, `Panel`, `Tile`, `Status`, `Spinner`, `Table`, `Footer`, `button()`, `busy()`, `embed_figure()` |
+| `tk/example_panel.py` | Telemetry panel in Tk. Start here for Python desktop GUIs. |
 | `fonts/` | Roboto TTFs, registered automatically by `eo_style.py` |
 
 ## Branding
@@ -49,6 +51,16 @@ HTML: start from the closest file in `examples/`. Link the files in `web/` with 
 
 React or an existing app: map the `--ax-*` variables into the app's theme and port the behaviors in `ax-fx.js`. Keep the rules below even if class names change.
 
+tkinter (the default for Python test and demo GUIs):
+
+```python
+import sys; sys.path.insert(0, "<skill>/tk")
+import eo_tk as eo
+eo.apply(root, "dark")   # then Header, Panel, Tile, Footer; plain ttk widgets are themed automatically
+```
+
+Use `eo_tk` widgets rather than ad-hoc colors: no hardcoded hex, no default gray Tk look, no `tk.Button` where `eo.button` fits. Charts in Tk are matplotlib via `eo.use_matplotlib()` and `eo.embed_figure()`. Tk can't letter-space or draw row rules, so titles are uppercase only and tables rely on row hover.
+
 matplotlib:
 
 ```python
@@ -73,16 +85,17 @@ Type
 Shape
 - Corner radius 0 everywhere. The spinner is the one round thing.
 - 1 px borders. No drop shadows on panels, no gradients on surfaces, no glassmorphism.
-- Panels and tiles get the 8 px terracotta corner bracket on the top-left (`.ax-panel` does this).
+- Panels and tiles get the 8 px white corner bracket on the top-left (`.ax-panel` does this).
 - Page title starts with the EO mark in the accent color (`.ax h1::before` does this).
 
 Color
-- Terracotta `accent` (`#e2683c` dark, `#c4532a` light) goes on live readout values, the main action button, focus rings, spinners, brackets, and hover glows. Not in charts.
+- Brand colors are black, white, and dark gray. Dark mode: `bg #000000`, `panel #0a0a0a`, separators `#2b2b2b` (strong `#3d3d3d`), text `#ffffff`, secondary text `#8f8f8f`. The `accent` is white (`#ffffff`; black `#000000` in light mode) and goes on live readout values, the main action button (white fill, black text), focus rings, spinners, brackets, and hover glows. Not in charts.
+- No hue outside charts and status. Separation comes from dark gray 1 px lines, never from tinted fills.
 - Categorical series use this order and never cycle. Dark: `#2f62e8 #e03a2f #0f9a66 #a45ee0 #1a9cc0 #d9539a`. Light: `#1f4fd8 #e3241b #0f8a5f #8a3fd1 #0e7fa3 #c2307a`. A 7th series folds into "Other" or a second chart.
 - A series keeps its color when filters hide other series.
 - Status colors (`good`, `warning`, `critical`, `off`) only mean state. Always pair the square with a word: `■ Warning`.
 - Text is `ink` or `muted`, never a series color.
-- Adding a new color? Run the dataviz skill's `scripts/validate_palette.js` against `#141516` (dark) or `#ffffff` (light) and fix any FAIL.
+- Adding a new color? Run the dataviz skill's `scripts/validate_palette.js` against `#0a0a0a` (dark) or `#ffffff` (light) and fix any FAIL.
 
 Charts
 - Every axis on every chart has a title: the quantity, then the unit after a comma. `Phase current, A`. `Time before now, s`. Category axes too (`Test`). 3D scenes label their X/Y/Z triad with units. `ax-charts.js` draws a red warning if a label is missing; `eo_style.save()` refuses to save.
@@ -100,13 +113,13 @@ Layout
 - Header: title and run metadata (run id, firmware, rev, live status) on the left, controls on the right, one rule under it.
 - A row of tiles, then charts or a 3D view in a grid with 8 px gaps, then tables, then notes.
 - Each chart has an uppercase title, then a one-line muted caption.
-- Tables: uppercase mono headers, 1 px row rules, numbers right-aligned, timestamps muted with milliseconds, a faint terracotta row hover.
+- Tables: uppercase mono headers, 1 px row rules, numbers right-aligned, timestamps muted with milliseconds, a faint white row hover.
 
 ## Personality defaults (always on, no one has to ask)
 
 - Spinner wherever something is running or loading. Buttons that start work swap to `◌ Running` and disable until done (`axBusy(btn, true, 'Homing')`). Panels waiting on data dim and show the large spinner with a one-word label (`data-busy="Fetching cycles"`). 3D models show it while they load (`axScene().load()` does this). Never leave a blank panel or a frozen button.
 - The main feature on each screen gets a hover effect via `data-fx`. There are three. Pick the one that matches what it does: `sparks` for start, run, launch, enable motor, power; `ripple` for connect, scan, capture, sync; `orbit` for record, stream, auto. One per screen, two at most. Secondary buttons get only the border-color change.
-- Live readouts flash and tween when they change (`axSet(el, value, { digits })`).
+- Live readouts tween when they change and flash a faint white highlight (`axSet(el, value, { digits })`).
 - A live data stream shows a breathing green square: `<span class="ax-status live">Live</span>`.
 - Buttons press down 1 px on click. Table rows tint on hover. Clicking an object in a 3D view jumps to its control.
 - Empty states say what's missing in one muted line ("No runs yet. Start one above."), never a blank box.
@@ -114,7 +127,7 @@ Layout
 
 ## 3D and collage
 
-Use `axScene()` for any 3D view: robot poses, CAD previews, sensor point clouds, workspace layouts. It gives flat dark solids with thin ink edges like a CAD drawing, a dashed floor grid, a labeled XYZ triad, idle auto-rotate that stops when touched, a camera dolly-in on load, and a terracotta glow plus tooltip on hover. Build parts with `v.solid(geometry)`, make them interactive with `v.pickable(mesh, infoFnOrHtml, onClick)`, load real CAD with `await v.load('part.stl', { size, parent })`. Connect 3D objects to the panel both ways: sliders move the model, clicking the model focuses the slider. See `examples/arm-3d.html`.
+Use `axScene()` for any 3D view: robot poses, CAD previews, sensor point clouds, workspace layouts. It gives flat dark solids with thin ink edges like a CAD drawing, a dashed floor grid, a labeled XYZ triad, idle auto-rotate that stops when touched, a camera dolly-in on load, and a white glow plus tooltip on hover. Build parts with `v.solid(geometry)`, make them interactive with `v.pickable(mesh, infoFnOrHtml, onClick)`, load real CAD with `await v.load('part.stl', { size, parent })`. Connect 3D objects to the panel both ways: sliders move the model, clicking the model focuses the slider. See `examples/arm-3d.html`.
 
 Use `axCollage()` for project galleries, build logs, and photo walls. Photos sit desaturated on a tilted wall that leans toward the mouse; the hovered photo lifts out in full color with its caption and corner bracket; click opens a lightbox. Give big hero shots `span: [2, 2]`. See `examples/collage.html`.
 
