@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arm 02 · 3D pose</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Condensed:wght@500;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../web/tokens.css">
+<script src="../web/ax-charts.js"></script>
+<script src="../web/ax-fx.js"></script>
+<script type="importmap">{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }</script>
+<style>
+  body { margin: 0; }
+  .nav { display: flex; gap: 18px; margin-bottom: 18px; font: 11px var(--ax-font-mono); text-transform: uppercase; letter-spacing: 0.1em; }
+  .nav a { color: var(--ax-muted); text-decoration: none; } .nav a[aria-current] { color: var(--ax-accent); }
+  .main { grid-template-columns: 1fr 320px; }
+  #view { height: 540px; padding: 0; }
+  .joint { padding: 10px 0 12px; border-bottom: 1px solid var(--ax-rule); transition: background 0.2s; }
+  .joint.focus { background: rgba(var(--ax-accent-rgb), 0.08); box-shadow: inset 2px 0 0 var(--ax-accent); padding-left: 8px; }
+  .joint .row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .joint b { font: 500 18px var(--ax-font-mono); color: var(--ax-accent); }
+  .joint b small { font-size: 11px; color: var(--ax-muted); font-weight: 400; margin-left: 2px; }
+  .ee { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 14px; }
+  .ee div { border: 1px solid var(--ax-border); padding: 6px 8px; }
+  .ee b { display: block; font: 500 15px var(--ax-font-mono); }
+</style>
+</head>
+<body class="ax">
+<main class="ax-page">
+  <nav class="nav"><a href="panel.html">Panel</a><a href="arm-3d.html" aria-current="page">3D arm</a><a href="fx.html">Motion</a><a href="collage.html">Collage</a></nav>
+  <header class="ax-mast">
+    <div>
+      <h1>Arm 02 pose</h1>
+      <div class="ax-meta"><span>4 DOF</span><span>gripper robotiq 2f-85</span><span class="ax-status" id="motorState">Motors off</span></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="ax-btn" id="home">Home</button>
+      <button class="ax-btn primary" id="enable" data-fx="sparks">Enable motor</button>
+    </div>
+  </header>
+
+  <section class="ax-grid main">
+    <div class="ax-panel" id="view"><div class="ax-viewport-hint">Drag to orbit · scroll to zoom · hover a joint</div></div>
+    <div class="ax-panel">
+      <h2>Joint targets</h2>
+      <div class="ax-cap">Enable motors to move. Click a joint in the view to jump here.</div>
+      <div id="joints"></div>
+      <div class="ax-label" style="margin-top:16px">End effector, mm</div>
+      <div class="ee"><div><span class="ax-label">X</span><b id="ex">0</b></div><div><span class="ax-label">Y</span><b id="ey">0</b></div><div><span class="ax-label">Z</span><b id="ez">0</b></div></div>
+    </div>
+  </section>
+
+  <section class="ax-panel">
+    <h2>Joint angles</h2>
+    <div class="ax-cap">Measured angle per joint over the last 30 s</div>
+    <div class="ax-legend" id="lg"></div>
+    <svg id="trace"></svg>
+  </section>
+  <footer class="ax-foot"><img class="ax-wordmark" src="../assets/logo/eo-wordmark-white.png" alt="Excessive Overkill"><span>bench panel template</span></footer>
+</main>
+
+<script type="module">
+import { axScene } from '../web/ax-three.js';
+
+const JOINTS = [
+  { id: 'J1', name: 'base yaw', min: -170, max: 170, axis: 'y' },
+  { id: 'J2', name: 'shoulder', min: -10, max: 100, axis: 'z' },
+  { id: 'J3', name: 'elbow', min: -140, max: 10, axis: 'z' },
+  { id: 'J4', name: 'wrist', min: -100, max: 100, axis: 'z' },
+];
+const HOME = [0, 35, -70, 35];
+const target = [...HOME], actual = [...HOME];
+let enabled = false;
+
+// ── Scene ──
+const v = axScene(document.getElementById('view'), { units: 'mm', floor: 360, camera: [720, 470, 780], target: [0, 230, 0] });
+const { THREE } = v;
+const deg = THREE.MathUtils.degToRad;
+
+const base = v.solid(new THREE.CylinderGeometry(55, 65, 36, 6));
+base.position.y = 18; v.scene.add(base);
+const yaw = new THREE.Group(); yaw.position.y = 36; v.scene.add(yaw);
+const tower = v.solid(new THREE.BoxGeometry(56, 70, 56)); tower.position.y = 35; yaw.add(tower);
+
+const shoulder = new THREE.Group(); shoulder.position.y = 80; yaw.add(shoulder);
+const jShoulder = v.solid(new THREE.CylinderGeometry(26, 26, 70, 16), { color: 'axis' }); jShoulder.rotation.x = Math.PI / 2; shoulder.add(jShoulder);
+const link1 = v.solid(new THREE.BoxGeometry(34, 170, 34)); link1.position.y = 85; shoulder.add(link1);
+
+const elbow = new THREE.Group(); elbow.position.y = 170; shoulder.add(elbow);
+const jElbow = v.solid(new THREE.CylinderGeometry(20, 20, 56, 16), { color: 'axis' }); jElbow.rotation.x = Math.PI / 2; elbow.add(jElbow);
+const link2 = v.solid(new THREE.BoxGeometry(28, 140, 28)); link2.position.y = 70; elbow.add(link2);
+
+const wrist = new THREE.Group(); wrist.position.y = 140; elbow.add(wrist);
+const jWrist = v.solid(new THREE.CylinderGeometry(15, 15, 44, 16), { color: 'axis' }); jWrist.rotation.x = Math.PI / 2; wrist.add(jWrist);
+const tool = new THREE.Group(); tool.position.y = 40; wrist.add(tool);
+const tcp = new THREE.Object3D(); tcp.position.y = 40; tool.add(tcp);
+v.label(tcp, 'TCP');
+
+const pivots = [yaw, shoulder, elbow, wrist];
+const jointMeshes = [[base, tower], [jShoulder, link1], [jElbow, link2], [jWrist]];
+jointMeshes.forEach((ms, k) => ms.forEach(m => v.pickable(m,
+  () => `${JOINTS[k].id} · ${JOINTS[k].name}<br>${actual[k].toFixed(1)}° (target ${target[k].toFixed(0)}°)`,
+  () => focusJoint(k))));
+
+// The gripper is a real STL; the viewport shows its spinner while it loads
+v.load('assets/robotiq_base.stl', { size: 70, parent: tool }).then(g => {
+  g.rotation.x = -Math.PI / 2;
+  g.position.y = 10;
+  v.pickable(g.children[0], 'Gripper · Robotiq 2F-85 base');
+}).catch(err => console.error('gripper load failed', err));
+
+// ── Joint sliders ──
+const list = document.getElementById('joints');
+const rows = JOINTS.map((j, k) => {
+  const row = document.createElement('div');
+  row.className = 'joint';
+  row.innerHTML = `<div class="row"><span class="ax-label">${j.id} · ${j.name}</span><b><span>${target[k]}</span><small>°</small></b></div>
+    <input class="ax-range" type="range" min="${j.min}" max="${j.max}" value="${target[k]}" disabled>`;
+  const input = row.querySelector('input'), out = row.querySelector('b span');
+  input.oninput = () => { target[k] = +input.value; out.textContent = input.value; };
+  list.appendChild(row);
+  return { row, input, out };
+});
+function focusJoint(k) {
+  rows.forEach((r, i) => r.row.classList.toggle('focus', i === k));
+  rows[k].row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+
+// ── Buttons ──
+const enableBtn = document.getElementById('enable'), state = document.getElementById('motorState');
+enableBtn.onclick = () => {
+  axBusy(enableBtn, true, enabled ? 'Disabling' : 'Enabling');
+  setTimeout(() => {
+    enabled = !enabled;
+    axBusy(enableBtn, false);
+    enableBtn.textContent = enabled ? 'Disable motor' : 'Enable motor';
+    enableBtn.classList.toggle('primary', !enabled);
+    enableBtn.classList.toggle('danger', enabled);
+    state.className = 'ax-status ' + (enabled ? 'live' : '');
+    state.textContent = enabled ? 'Motors on' : 'Motors off';
+    rows.forEach(r => (r.input.disabled = !enabled));
+  }, 700);
+};
+const homeBtn = document.getElementById('home');
+homeBtn.onclick = () => {
+  HOME.forEach((h, k) => { target[k] = h; rows[k].input.value = h; rows[k].out.textContent = h; });
+  axBusy(homeBtn, true, 'Homing');
+  const wait = setInterval(() => {
+    if (actual.every((a, k) => Math.abs(a - target[k]) < 0.5)) { clearInterval(wait); axBusy(homeBtn, false); }
+  }, 100);
+};
+
+// ── Motion + readouts ──
+const wp = new THREE.Vector3(), [ex, ey, ez] = ['ex', 'ey', 'ez'].map(id => document.getElementById(id));
+v.onFrame(dt => {
+  actual.forEach((a, k) => (actual[k] += (target[k] - a) * Math.min(1, dt * 3.5)));
+  yaw.rotation.y = deg(actual[0]);
+  shoulder.rotation.z = -deg(actual[1]);
+  elbow.rotation.z = -deg(actual[2]);
+  wrist.rotation.z = -deg(actual[3]);
+  tcp.getWorldPosition(wp);
+  ex.textContent = wp.x.toFixed(0); ey.textContent = wp.y.toFixed(0); ez.textContent = wp.z.toFixed(0);
+});
+
+// ── Trace ──
+const SAMPLES = 120;
+const hist = JOINTS.map((j, k) => ({ name: j.id, values: Array(SAMPLES).fill(actual[k]) }));
+const lg = document.getElementById('lg');
+hist.forEach((s, k) => { const e = document.createElement('span'); e.style.setProperty('--c', `var(--ax-s${k + 1})`); e.textContent = s.name; lg.appendChild(e); });
+function drawTrace() {
+  axLine(document.getElementById('trace'), { series: hist, yTicks: [-180, -90, 0, 90, 180], unit: '°', width: 1060, height: 220,
+    x: i => i === SAMPLES - 1 ? 'now' : `-${((SAMPLES - 1 - i) / 4).toFixed(0)}`, xTicks: [0, 30, 60, 90, 119],
+    xLabel: 'Time before now, s', yLabel: 'Joint angle, °' });
+}
+setInterval(() => { hist.forEach((s, k) => { s.values.shift(); s.values.push(actual[k]); }); drawTrace(); }, 250);
+drawTrace();
+document.fonts.ready.then(drawTrace);
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+# eo-style, light (reports and print). Values mirror ../tokens.json.
+# plt.style.use("path/to/eo-style-guide/matplotlib/eo-light.mplstyle")
+
+font.family: sans-serif
+font.sans-serif: Roboto, Helvetica Neue, Arial, DejaVu Sans
+font.monospace: Roboto Mono, Menlo, DejaVu Sans Mono
+font.size: 10
+text.color: 0b0b0b
+
+figure.facecolor: ffffff
+figure.edgecolor: ffffff
+figure.dpi: 120
+savefig.facecolor: ffffff
+savefig.edgecolor: ffffff
+savefig.dpi: 200
+savefig.bbox: tight
+
+axes.facecolor: ffffff
+axes.edgecolor: 0b0b0b
+axes.labelcolor: 0b0b0b
+axes.labelsize: 9
+axes.titlesize: 10
+axes.titleweight: medium
+axes.titlelocation: left
+axes.titlepad: 10
+axes.titlecolor: 0b0b0b
+axes.spines.top: False
+axes.spines.right: False
+axes.spines.left: False
+axes.grid: True
+axes.grid.axis: y
+axes.axisbelow: True
+axes.prop_cycle: cycler('color', ['1f4fd8', 'e3241b', '0f8a5f', '8a3fd1', '0e7fa3', 'c2307a'])
+
+grid.color: e6e6e3
+grid.linestyle: (0, (2, 4))
+grid.linewidth: 0.8
+
+xtick.color: 5f5f5a
+ytick.color: 5f5f5a
+xtick.labelsize: 8.5
+ytick.labelsize: 8.5
+ytick.left: False
+xtick.direction: out
+
+lines.linewidth: 2.0
+lines.solid_capstyle: round
+lines.solid_joinstyle: round
+lines.markersize: 6
+
+patch.edgecolor: none
+patch.linewidth: 0
+
+legend.frameon: False
+legend.fontsize: 8.5
+legend.labelcolor: 5f5f5a
+legend.handlelength: 1.0
+legend.handleheight: 1.0

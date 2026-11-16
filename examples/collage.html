@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project wall · collage</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Condensed:wght@500;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../web/tokens.css">
+<script src="../web/ax-fx.js"></script>
+<script src="../web/ax-collage.js"></script>
+<style>
+  body { margin: 0; }
+  .nav { display: flex; gap: 18px; margin-bottom: 18px; font: 11px var(--ax-font-mono); text-transform: uppercase; letter-spacing: 0.1em; }
+  .nav a { color: var(--ax-muted); text-decoration: none; } .nav a[aria-current] { color: var(--ax-accent); }
+  #wall { margin: 0 -32px; }
+</style>
+</head>
+<body class="ax">
+<main class="ax-page">
+  <nav class="nav"><a href="panel.html">Panel</a><a href="arm-3d.html">3D arm</a><a href="fx.html">Motion</a><a href="collage.html" aria-current="page">Collage</a></nav>
+  <header class="ax-mast">
+    <div>
+      <h1>Project wall</h1>
+      <div class="ax-meta"><span>12 photos</span><span>hover to lift · click to open</span></div>
+    </div>
+    <button class="ax-btn primary" data-fx="ripple" id="shuffle">Shuffle wall</button>
+  </header>
+  <div id="wall"></div>
+</main>
+<script>
+const photos = [
+  // Placeholders. Swap src for your own photos and renders.
+  { src: 'assets/placeholder-01.svg', caption: 'Hero shot', span: [2, 2] },
+  { src: 'assets/placeholder-02.svg', caption: 'Controller PCB' },
+  { src: 'assets/placeholder-03.svg', caption: 'CAD view', span: [2, 1] },
+  { src: 'assets/placeholder-04.svg', caption: 'Camera mount' },
+  { src: 'assets/placeholder-05.svg', caption: 'Exploded view', span: [1, 2] },
+  { src: 'assets/placeholder-06.svg', caption: 'Prototype' },
+  { src: 'assets/placeholder-07.svg', caption: 'Assembled', span: [2, 2] },
+  { src: 'assets/placeholder-08.svg', caption: 'Axis, CAD' },
+  { src: 'assets/placeholder-09.svg', caption: 'Bench', span: [1, 2] },
+  { src: 'assets/placeholder-10.svg', caption: 'Field test', span: [2, 1] },
+  { src: 'assets/placeholder-11.svg', caption: 'Render' },
+  { src: 'assets/placeholder-12.svg', caption: 'Sim screenshot' },
+];
+const wall = document.getElementById('wall');
+axCollage(wall, photos, { columns: 6, rowHeight: 130 });
+document.getElementById('shuffle').onclick = () => {
+  axBusy(wall, true, 'Shuffling');
+  setTimeout(() => { axCollage(wall, photos.sort(() => Math.random() - 0.5), { columns: 6, rowHeight: 130 }); axBusy(wall, false); }, 500);
+};
+</script>
+</body>
+</html>

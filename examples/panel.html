@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arm bench 02 · panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Condensed:wght@500;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../web/tokens.css">
+<script src="../web/ax-charts.js"></script>
+<script src="../web/ax-fx.js"></script>
+<style>
+  body { margin: 0; }
+  .two { grid-template-columns: 1.6fr 1fr; }
+  .report { display: grid; grid-template-columns: 1fr 1.1fr; gap: 28px; margin-top: 8px; padding-top: 20px; border-top: 1px solid var(--ax-border); }
+  .nav { display: flex; gap: 18px; margin-bottom: 18px; font: 11px var(--ax-font-mono); text-transform: uppercase; letter-spacing: 0.1em; }
+  .nav a { color: var(--ax-muted); text-decoration: none; } .nav a[aria-current] { color: var(--ax-accent); }
+</style>
+</head>
+<body class="ax">
+<main class="ax-page">
+  <nav class="nav"><a href="panel.html" aria-current="page">Panel</a><a href="arm-3d.html">3D arm</a><a href="fx.html">Motion</a><a href="collage.html">Collage</a></nav>
+  <header class="ax-mast">
+    <div>
+      <h1>Arm bench 02</h1>
+      <div class="ax-meta"><span>run 2026-10-15-a</span><span>fw 0.9.4</span><span>rev C</span><span class="ax-status live">Live</span></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="ax-btn" id="mode">Light mode</button>
+      <button class="ax-btn" id="export">Export CSV</button>
+      <button class="ax-btn primary" id="start" data-fx="sparks">Start run</button>
+    </div>
+  </header>
+
+  <section class="ax-tiles">
+    <div class="ax-tile"><div class="ax-label">Bus voltage</div><div class="ax-value" id="v">24.12<small>V</small></div><div class="ax-sub">min 23.80 · max 24.31</div></div>
+    <div class="ax-tile"><div class="ax-label">Loop rate</div><div class="ax-value" id="hz">998<small>Hz</small></div><div class="ax-sub">target 1000</div></div>
+    <div class="ax-tile"><div class="ax-label">Peak motor temp</div><div class="ax-value">61.4<small>°C</small></div><div class="ax-sub"><span class="ax-status warning">J3 above 60</span></div></div>
+    <div class="ax-tile"><div class="ax-label">Faults this run</div><div class="ax-value">0</div><div class="ax-sub"><span class="ax-status good">Nominal</span></div></div>
+  </section>
+
+  <section class="ax-grid two">
+    <div class="ax-panel">
+      <h2>Joint current</h2>
+      <div class="ax-cap">Phase current per joint over the last 60 s</div>
+      <div class="ax-legend" id="lg"></div>
+      <svg id="line"></svg>
+    </div>
+    <div class="ax-panel" id="barsPanel" data-busy="Fetching cycles">
+      <h2>Cycle time by test</h2>
+      <div class="ax-cap">Median of 20 cycles. Red marks the slowest.</div>
+      <svg id="bars"></svg>
+    </div>
+  </section>
+
+  <section class="ax-panel">
+    <h2>Event log</h2>
+    <div class="ax-cap">Most recent first</div>
+    <table>
+      <thead><tr><th>Time</th><th>Source</th><th>Event</th><th>Status</th><th class="num">Value</th></tr></thead>
+      <tbody>
+        <tr><td class="time">13:42:07.114</td><td>J3</td><td>Winding temp above soft limit</td><td><span class="ax-status warning">Warning</span></td><td class="num">61.4 °C</td></tr>
+        <tr><td class="time">13:41:52.880</td><td>CAN</td><td>Heartbeat resumed on node 0x12</td><td><span class="ax-status good">OK</span></td><td class="num">3 ms</td></tr>
+        <tr><td class="time">13:41:52.401</td><td>CAN</td><td>Heartbeat missed on node 0x12</td><td><span class="ax-status critical">Critical</span></td><td class="num">480 ms</td></tr>
+        <tr><td class="time">13:40:10.002</td><td>Host</td><td>Run started</td><td><span class="ax-status">Idle</span></td><td class="num">—</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="report">
+    <div>
+      <h2>Bench notes</h2>
+      <p>J3 ran 6 °C hotter than J1 under the same load profile. I swapped the J3 driver board with J2 and the heat followed the motor, so the board is fine. The motor came from the second batch.</p>
+      <p>The CAN dropout at 13:41:52 lasted 480 ms. Node <code>0x12</code> came back without a reset. I could not reproduce it on the next three runs.</p>
+    </div>
+    <figure>
+      <svg id="temp"></svg>
+      <figcaption><b>Fig. 3.</b> Winding temperature, J1 vs J3, over the full run.</figcaption>
+    </figure>
+  </section>
+  <footer class="ax-foot"><img class="ax-wordmark" src="../assets/logo/eo-wordmark-white.png" alt="Excessive Overkill"><span>bench panel template</span></footer>
+</main>
+
+<script>
+// Deterministic sample telemetry
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const N = 120;
+const joints = ['J1', 'J2', 'J3', 'J4'].map((name, k) => ({ name, values: Array.from({ length: N }, (_, i) =>
+  1.2 + k * 0.55 + Math.sin(i / (9 + k * 3) + k) * (0.5 + k * 0.1) + (rnd() - 0.5) * 0.25 + (k === 2 && i > 80 ? (i - 80) * 0.02 : 0)) }));
+const temp = ['J1', 'J3'].map((name, k) => ({ name, values: Array.from({ length: 60 }, (_, i) => 28 + i * (k ? 0.56 : 0.46) - Math.exp(-i / 12) * 4 + (rnd() - 0.5) * 0.6) }));
+temp[1].color = 'var(--ax-s3)';
+let barsReady = false;
+
+function draw() {
+  const lg = document.getElementById('lg'); lg.innerHTML = '';
+  joints.forEach((s, k) => { const e = document.createElement('span'); e.style.setProperty('--c', `var(--ax-s${k + 1})`); e.textContent = s.name; lg.appendChild(e); });
+  axLine(document.getElementById('line'), { series: joints, yTicks: [0, 1, 2, 3, 4], unit: 'A',
+    x: i => i === N - 1 ? 'now' : `-${Math.round((N - 1 - i) / 2)}`, xTicks: [0, 30, 60, 90, 119],
+    xLabel: 'Time before now, s', yLabel: 'Phase current, A' });
+  if (barsReady) axBars(document.getElementById('bars'), { rows: [['Pick', 412], ['Place', 388], ['Home', 205], ['Wave', 296], ['Reach', 451], ['Stow', 174]],
+    max: 500, highlight: 'Reach', unit: 'ms', xLabel: 'Cycle time, ms', yLabel: 'Test' });
+  axLine(document.getElementById('temp'), { series: temp, yTicks: [20, 40, 60], unit: '°C', width: 420, height: 190,
+    x: i => `${i}`, xTicks: [0, 30, 59], refLine: { value: 60, label: 'soft limit 60°' },
+    xLabel: 'Run time, min', yLabel: 'Winding temp, °C' });
+}
+
+// The bar panel pretends to fetch for 1.2 s so the panel spinner shows on load
+setTimeout(() => { barsReady = true; document.getElementById('barsPanel').removeAttribute('data-busy'); draw(); }, 1200);
+
+// Buttons that do work show the inline spinner until the work finishes
+document.getElementById('export').onclick = e => { axBusy(e.currentTarget, true, 'Exporting'); setTimeout(() => axBusy(e.currentTarget, false), 1500); };
+document.getElementById('start').onclick = e => { const b = e.currentTarget; setTimeout(() => axBusy(b, true, 'Running'), 250); setTimeout(() => axBusy(b, false), 4000); };
+
+// Live readouts flash when they change
+setInterval(() => {
+  axSet(document.getElementById('v'), 24.0 + rnd() * 0.3, { digits: 2 });
+  axSet(document.getElementById('hz'), 995 + Math.round(rnd() * 5));
+}, 1500);
+
+document.getElementById('mode').onclick = e => {
+  const light = document.documentElement.dataset.mode !== 'light';
+  document.documentElement.dataset.mode = light ? 'light' : '';
+  e.target.textContent = light ? 'Dark mode' : 'Light mode';
+  draw();
+};
+if (location.hash === '#light') document.getElementById('mode').click(); else draw();
+document.fonts.ready.then(draw);
+</script>
+</body>
+</html>

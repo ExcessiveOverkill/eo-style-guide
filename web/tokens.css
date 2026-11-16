@@ -1,0 +1,227 @@
+/* EO style tokens + components. Values mirror ../tokens.json.
+   Dark is the default. Put data-mode="light" on <html> for reports and print.
+   Load the fonts first:
+   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Condensed:wght@500;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet"> */
+
+:root {
+  --ax-font: 'Roboto', system-ui, sans-serif;
+  --ax-font-title: 'Roboto Condensed', 'Roboto', sans-serif;
+  --ax-font-mono: 'Roboto Mono', ui-monospace, Menlo, monospace;
+
+  --ax-bg: #0e0f10;
+  --ax-panel: #141516;
+  --ax-border: #2a2c2f;
+  --ax-border-strong: #3a3c3f;
+  --ax-rule: #222426;
+  --ax-grid: #26282b;
+  --ax-axis: #4a4c4e;
+  --ax-ink: #e4e1d8;
+  --ax-muted: #8a877e;
+  --ax-accent: #e2683c;
+  --ax-accent-rgb: 226, 104, 60;
+  --ax-on-accent: #0e0f10;
+  /* EO mark as a mask, so it can take any color (see .ax-logo). Same shape as assets/logo/eo-mark-white.svg */
+  --ax-mark: url("data:image/svg+xml,%3Csvg width=%22782%22 height=%22781%22 viewBox=%220 0 782 781%22 fill=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22%3E %3Cpath fill-rule=%22evenodd%22 clip-rule=%22evenodd%22 d=%22M367.19 1.253C273.819 6.60782 180.45 48.9808 114.143 116.095C35.9928 195.195 -4.22573 301.177 1.70223 412.396C10.6111 579.522 127.295 723.133 289.952 767.162C396.27 795.942 510.368 777.832 603.85 717.34C695.88 657.787 760.008 558.647 776.587 450.292C779.163 433.458 782.36 398.249 782.114 389.442C781.691 374.363 779.076 346.486 776.605 330.708C748.055 148.426 595.867 11.1954 411.071 1.10061C399.994 0.495282 389.28 0.0709179 387.262 0.156637C385.243 0.242357 376.211 0.736567 367.19 1.253ZM371.952 33.8719C325.122 35.8974 275.121 49.2083 230.416 71.5515C83.8218 144.815 6.10111 310.064 42.8297 470.399C72.7298 600.923 171.884 702.68 302.112 736.485C366.232 753.13 434.848 751.32 498.406 731.308C682.758 673.262 787.807 478.673 734.951 293.14C693.973 149.305 568.929 46.7394 419.571 34.454C408.513 33.5449 396.846 32.8867 393.645 32.9925C390.444 33.0983 380.682 33.4941 371.952 33.8719ZM120.894 390.765L121.162 574.109H160.315H199.468L199.736 390.765L200.003 207.42H160.315H120.627L120.894 390.765ZM222.219 238.639V269.858H289.04H355.861L355.201 257.952C354.838 251.405 354.269 238.903 353.937 230.173C353.604 221.442 353.095 212.751 352.806 210.859L352.28 207.42H287.25H222.219V238.639ZM464.544 208.528C441.083 210.929 422.715 219.373 410.442 233.398C403.927 240.842 399.77 248.977 396.616 260.447L394.174 269.329V390.5C394.174 505.912 394.269 512.048 396.178 519.608C400.335 536.068 409.907 550.405 422.411 558.897C438.106 569.555 454.407 573.319 489.123 574.297L513.22 574.976V543.211V511.446L499.635 510.896C484.211 510.27 479.703 508.584 475.042 501.698L472.48 497.914V390.952V283.99L475.391 279.591C479.969 272.673 484.645 270.886 500.087 270.156L513.22 269.536V238.478V207.42L492.85 207.568C481.647 207.65 468.909 208.081 464.544 208.528ZM535.442 238.338V269.55L548.466 270.113C568.495 270.977 574.085 274.674 576.709 288.786C578.221 296.918 578.139 484.397 576.619 492.692C574.04 506.781 568.867 510.188 548.934 510.924L535.442 511.423V543.199V574.976L559.824 574.289C578.153 573.773 586.882 573.057 594.983 571.406C627.273 564.825 645.536 548.19 653.011 518.55L655.546 508.497V389.971V271.445L653.106 262.571C646.551 238.728 633.392 223.477 612.161 215.115C598.141 209.593 589.517 208.341 561.103 207.703L535.442 207.126V238.338ZM222.219 390.5V419.073H274.599H326.979V390.5V361.927H274.599H222.219V390.5ZM222.219 542.89V574.638H287.233H352.246L352.796 570.141C353.288 566.112 355.562 519.43 355.554 513.523L355.55 511.142H288.885H222.219V542.89Z%22 fill=%22white%22/%3E %3C/svg%3E");
+  --ax-glow: 0 0 14px rgba(var(--ax-accent-rgb), 0.28);
+
+  /* Categorical order is fixed. Never cycle past 6; fold the rest into "Other". */
+  --ax-s1: #2f62e8;
+  --ax-s2: #e03a2f;
+  --ax-s3: #0f9a66;
+  --ax-s4: #a45ee0;
+  --ax-s5: #1a9cc0;
+  --ax-s6: #d9539a;
+
+  --ax-good: #4fbf5a;
+  --ax-warning: #e6c229;
+  --ax-critical: #ff5a4a;
+  --ax-off: #5a5c5e;
+
+  --ax-line-w: 2.5;
+  --ax-grid-dash: 2 4;
+  --ax-gap: 8px;
+  --ax-ease: cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+[data-mode="light"] {
+  --ax-bg: #ffffff;
+  --ax-panel: #ffffff;
+  --ax-border: #d4d4d0;
+  --ax-border-strong: #0b0b0b;
+  --ax-rule: #e6e6e3;
+  --ax-grid: #e6e6e3;
+  --ax-axis: #0b0b0b;
+  --ax-ink: #0b0b0b;
+  --ax-muted: #5f5f5a;
+  --ax-accent: #c4532a;
+  --ax-accent-rgb: 196, 83, 42;
+  --ax-on-accent: #ffffff;
+  --ax-glow: none;
+
+  --ax-s1: #1f4fd8;
+  --ax-s2: #e3241b;
+  --ax-s3: #0f8a5f;
+  --ax-s4: #8a3fd1;
+  --ax-s5: #0e7fa3;
+  --ax-s6: #c2307a;
+
+  --ax-good: #1d8a3e;
+  --ax-warning: #b58900;
+  --ax-critical: #d42a1c;
+  --ax-off: #9a9a95;
+}
+
+/* ── Base ───────────────────────────────────────────────────── */
+.ax, .ax * { box-sizing: border-box; }
+.ax { background: var(--ax-bg); color: var(--ax-ink); font: 14px/1.5 var(--ax-font); font-variant-numeric: tabular-nums; }
+.ax h1 { font: 700 24px/1.1 var(--ax-font-title); letter-spacing: 0.06em; text-transform: uppercase; margin: 0; }
+.ax h1::before { content: ""; display: inline-block; width: 0.9em; height: 0.9em; margin-right: 0.4em; vertical-align: -0.08em; background: var(--ax-accent); -webkit-mask: var(--ax-mark) center / contain no-repeat; mask: var(--ax-mark) center / contain no-repeat; }
+.ax h2 { font: 500 14px/1.3 var(--ax-font-title); letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 2px; }
+.ax p { max-width: 70ch; }
+.ax-page { max-width: 1120px; margin: 0 auto; padding: 28px 32px 64px; }
+.ax-label { font: 500 10px var(--ax-font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ax-muted); }
+.ax-mono { font-family: var(--ax-font-mono); }
+.ax-muted { color: var(--ax-muted); }
+.ax-cap { color: var(--ax-muted); font-size: 12px; margin-bottom: 10px; }
+
+/* Header bar: title left, controls right, one rule under it */
+.ax-mast { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 14px; margin-bottom: 22px; border-bottom: 1px solid var(--ax-border); }
+.ax-meta { display: flex; gap: 14px; color: var(--ax-muted); font: 12px var(--ax-font-mono); margin-top: 6px; }
+
+/* ── Brand ──────────────────────────────────────────────────────
+   <span class="ax-logo"></span>            EO mark in the accent color (h1 gets one automatically)
+   <span class="ax-logo ink"></span>        EO mark in the text color
+   <img class="ax-wordmark" src="../assets/logo/eo-wordmark-white.png" alt="Excessive Overkill">
+   The wordmark PNG is white; light mode inverts it to black. */
+.ax-logo { display: inline-block; width: 28px; height: 28px; flex: none; background: var(--ax-accent); -webkit-mask: var(--ax-mark) center / contain no-repeat; mask: var(--ax-mark) center / contain no-repeat; }
+.ax-logo.ink { background: var(--ax-ink); }
+.ax-wordmark { display: block; height: 14px; width: auto; }
+[data-mode="light"] .ax-wordmark { filter: invert(1); }
+.ax-brand { display: flex; align-items: center; gap: 12px; }
+.ax-foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 40px; padding-top: 14px; border-top: 1px solid var(--ax-border); color: var(--ax-muted); font: 11px var(--ax-font-mono); }
+.ax-foot .ax-wordmark { height: 10px; opacity: 0.7; }
+
+/* ── Panels and tiles ───────────────────────────────────────── */
+.ax-panel, .ax-tile { position: relative; background: var(--ax-panel); border: 1px solid var(--ax-border); padding: 16px 18px; }
+.ax-panel::before, .ax-tile::before { content: ""; position: absolute; top: -1px; left: -1px; width: 8px; height: 8px; border-top: 2px solid var(--ax-accent); border-left: 2px solid var(--ax-accent); }
+.ax-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--ax-gap); margin-bottom: var(--ax-gap); }
+.ax-tile { padding: 14px 16px; }
+.ax-value { font: 500 32px/1 var(--ax-font-mono); margin-top: 6px; color: var(--ax-accent); text-shadow: var(--ax-glow); transition: color 0.6s; }
+.ax-value small { font-size: 0.45em; color: var(--ax-muted); margin-left: 4px; font-weight: 400; text-shadow: none; }
+.ax-value.changed { color: var(--ax-ink); transition: none; }
+.ax-sub { font: 12px var(--ax-font-mono); color: var(--ax-muted); margin-top: 4px; }
+.ax-grid { display: grid; gap: var(--ax-gap); margin-bottom: var(--ax-gap); }
+
+/* ── Controls ───────────────────────────────────────────────── */
+.ax-btn { position: relative; display: inline-flex; align-items: center; gap: 8px; font: 500 12px/1 var(--ax-font-mono); text-transform: uppercase; letter-spacing: 0.1em; padding: 9px 13px; border: 1px solid var(--ax-border-strong); background: var(--ax-panel); color: var(--ax-ink); border-radius: 0; cursor: pointer; transition: border-color 0.15s, transform 0.08s; }
+.ax-btn:hover { border-color: var(--ax-accent); }
+.ax-btn:active { transform: translateY(1px); }
+.ax-btn:focus-visible { outline: 2px solid var(--ax-accent); outline-offset: 2px; }
+.ax-btn.primary { background: var(--ax-accent); color: var(--ax-on-accent); border-color: var(--ax-accent); }
+.ax-btn.danger { border-color: var(--ax-critical); color: var(--ax-critical); }
+.ax-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.ax-input { font: 13px var(--ax-font-mono); background: var(--ax-bg); color: var(--ax-ink); border: 1px solid var(--ax-border); border-radius: 0; padding: 6px 8px; }
+.ax-input:focus { outline: none; border-color: var(--ax-accent); }
+.ax-range { accent-color: var(--ax-accent); width: 100%; }
+
+/* Status: always a square + a word. Never color alone. */
+.ax-status { display: inline-flex; align-items: center; gap: 6px; font: 12px var(--ax-font-mono); }
+.ax-status::before { content: ""; width: 8px; height: 8px; background: var(--ax-off); }
+.ax-status.good::before { background: var(--ax-good); }
+.ax-status.warning::before { background: var(--ax-warning); }
+.ax-status.critical::before { background: var(--ax-critical); }
+/* Live indicator: the square breathes while data is streaming */
+.ax-status.live::before { background: var(--ax-good); animation: ax-breathe 1.6s ease-in-out infinite; }
+@keyframes ax-breathe { 50% { opacity: 0.35; transform: scale(0.75); } }
+
+/* ── Tables ─────────────────────────────────────────────────── */
+.ax table { width: 100%; border-collapse: collapse; }
+.ax th { text-align: left; font: 500 10px var(--ax-font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ax-muted); padding: 6px 8px; border-bottom: 1px solid var(--ax-border-strong); }
+.ax td { padding: 7px 8px; border-bottom: 1px solid var(--ax-rule); }
+.ax td.num, .ax th.num { text-align: right; font-family: var(--ax-font-mono); }
+.ax .ax-n { font-family: var(--ax-font-mono); font-variant-numeric: tabular-nums; }
+.ax td.time { color: var(--ax-muted); font-family: var(--ax-font-mono); }
+.ax tbody tr { transition: background 0.12s; }
+.ax tbody tr:hover { background: rgba(var(--ax-accent-rgb), 0.06); }
+
+/* ── Charts ─────────────────────────────────────────────────── */
+.ax-legend { display: flex; flex-wrap: wrap; gap: 14px; font: 12px var(--ax-font-mono); color: var(--ax-muted); margin-bottom: 6px; }
+.ax-legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; background: var(--c); margin-right: 6px; vertical-align: -1px; }
+.ax svg { display: block; width: 100%; height: auto; overflow: visible; }
+.ax svg text { font-family: var(--ax-font-mono); font-size: 11px; fill: var(--ax-muted); }
+.ax svg text.ax-axis-title { font-family: var(--ax-font); font-size: 11px; fill: var(--ax-ink); }
+.ax-tip { position: fixed; pointer-events: none; z-index: 50; display: none; background: var(--ax-bg); color: var(--ax-ink); border: 1px solid var(--ax-border); padding: 6px 8px; font: 12px/1.45 var(--ax-font-mono); }
+
+/* ── Report prose ───────────────────────────────────────────── */
+.ax figure { margin: 0; }
+.ax figcaption { font-size: 12px; color: var(--ax-muted); margin-top: 6px; }
+.ax figcaption b { color: var(--ax-ink); }
+.ax code { font-family: var(--ax-font-mono); font-size: 0.92em; color: var(--ax-accent); }
+
+/* ── Spinner ────────────────────────────────────────────────────
+   <span class="ax-spin"></span>, or add data-busy to any element (ax-fx.js
+   puts a spinner in it). An arc chases around a track while a small
+   satellite dot orbits the other way and the center dot bobs. */
+.ax-spin { --sz: 16px; position: relative; display: inline-block; width: var(--sz); height: var(--sz); flex: none; vertical-align: -3px; }
+.ax-spin::before { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(var(--ax-accent-rgb), 0.18); border-top-color: var(--ax-accent); border-right-color: var(--ax-accent); animation: ax-spin 0.9s var(--ax-ease) infinite; }
+.ax-spin::after { content: ""; position: absolute; width: 4px; height: 4px; left: 50%; top: 50%; margin: -2px; border-radius: 50%; background: var(--ax-ink); animation: ax-orbit 1.8s linear infinite reverse, ax-bob 0.9s ease-in-out infinite; }
+.ax-spin.lg { --sz: 40px; }
+.ax-spin.lg::before { border-width: 3px; }
+.ax-spin.lg::after { width: 6px; height: 6px; margin: -3px; }
+@keyframes ax-spin { to { transform: rotate(360deg); } }
+@keyframes ax-orbit { from { transform: rotate(0deg) translateX(calc(var(--sz) * 0.22)); } to { transform: rotate(360deg) translateX(calc(var(--sz) * 0.22)); } }
+@keyframes ax-bob { 50% { opacity: 0.4; } }
+/* Panel-level loading: dims the content and centers a big spinner */
+.ax-loading { position: relative; }
+.ax-loading > *:not(.ax-spin-wrap) { opacity: 0.35; transition: opacity 0.2s; }
+.ax-spin-wrap { position: absolute; inset: 0; display: grid; place-items: center; gap: 8px; align-content: center; font: 11px var(--ax-font-mono); color: var(--ax-muted); text-transform: uppercase; letter-spacing: 0.12em; z-index: 2; }
+
+/* ── Main-feature hover effects (driven by ax-fx.js) ────────── */
+.ax-fx-layer { position: fixed; inset: 0; pointer-events: none; z-index: 40; overflow: visible; }
+.ax-fx-layer path, .ax-fx-layer circle, .ax-fx-layer rect { fill: none; }
+[data-fx] { transition: box-shadow 0.25s, transform 0.15s var(--ax-ease); }
+[data-fx]:hover { box-shadow: 0 0 0 1px var(--ax-accent), 0 0 22px rgba(var(--ax-accent-rgb), 0.45); transform: translateY(-1px); }
+[data-fx]:active { transform: translateY(1px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ax-spin::before, .ax-spin::after, .ax-status.live::before { animation-duration: 3s; }
+  [data-fx]:hover { transform: none; }
+}
+
+/* ── 3D viewport (ax-three.js) ──────────────────────────────── */
+.ax-viewport { position: relative; min-height: 360px; background:
+  radial-gradient(ellipse at 50% 40%, rgba(var(--ax-accent-rgb), 0.05), transparent 60%), var(--ax-panel); overflow: hidden; }
+.ax-viewport canvas { display: block; }
+.ax-3d-label { font: 500 10px var(--ax-font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ax-muted); background: rgba(14, 15, 16, 0.7); padding: 2px 5px; white-space: nowrap; }
+[data-mode="light"] .ax-3d-label { background: rgba(255, 255, 255, 0.8); }
+.ax-viewport-hint { position: absolute; right: 12px; bottom: 10px; font: 10px var(--ax-font-mono); color: var(--ax-muted); letter-spacing: 0.08em; text-transform: uppercase; pointer-events: none; }
+
+/* ── Collage (ax-collage.js) ────────────────────────────────── */
+.ax-collage { perspective: 1600px; perspective-origin: 50% 30%; padding: 30px 70px 50px; overflow: hidden; }
+.ax-collage-wall { display: grid; grid-auto-flow: dense; gap: 10px; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(.2,.8,.3,1); }
+.ax-collage-tile { position: relative; margin: 0; overflow: visible; cursor: zoom-in; transform-style: preserve-3d;
+  transition: transform 0.35s var(--ax-ease); animation: ax-tile-in 0.7s cubic-bezier(.2,.8,.3,1) both; }
+.ax-collage-tile img { width: 100%; height: 100%; object-fit: cover; display: block; border: 1px solid var(--ax-border);
+  filter: grayscale(0.85) contrast(1.1) brightness(0.8); transition: filter 0.35s, box-shadow 0.35s; }
+.ax-collage-tile figcaption { position: absolute; left: 0; bottom: 0; right: 0; display: flex; gap: 8px; padding: 5px 7px;
+  font: 10px var(--ax-font-mono); letter-spacing: 0.06em; color: var(--ax-ink); background: linear-gradient(transparent, rgba(0,0,0,0.75));
+  opacity: 0; transform: translateY(4px); transition: opacity 0.25s, transform 0.25s; }
+.ax-collage-tile figcaption span { color: var(--ax-accent); }
+.ax-collage-tile::before { content: ""; position: absolute; z-index: 1; top: -3px; left: -3px; width: 12px; height: 12px;
+  border-top: 2px solid var(--ax-accent); border-left: 2px solid var(--ax-accent); opacity: 0; transition: opacity 0.2s; }
+.ax-collage-tile:hover { transform: translateZ(70px) scale(1.04); z-index: 2; }
+.ax-collage-tile:hover img { filter: none; box-shadow: 0 30px 40px -20px rgba(0,0,0,0.8), 0 0 0 1px var(--ax-accent); }
+.ax-collage-tile:hover figcaption, .ax-collage-tile:hover::before { opacity: 1; transform: none; }
+.ax-collage-wall:hover .ax-collage-tile:not(:hover) img { filter: grayscale(1) brightness(0.55); }
+@keyframes ax-tile-in { from { opacity: 0; transform: translateZ(-260px) rotateX(-20deg); } }
+
+.ax-lightbox { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; background: rgba(8, 8, 9, 0.88);
+  backdrop-filter: none; cursor: zoom-out; animation: ax-fade 0.18s ease-out; }
+.ax-lightbox.closing { animation: ax-fade 0.18s ease-in reverse forwards; }
+.ax-lightbox figure { margin: 0; max-width: 86vw; animation: ax-pop 0.3s var(--ax-ease); }
+.ax-lightbox img { max-width: 86vw; max-height: 78vh; display: block; border: 1px solid var(--ax-border); }
+.ax-lightbox figcaption { margin-top: 8px; font: 12px var(--ax-font-mono); color: #8a877e; }
+.ax-lightbox figcaption b { color: var(--ax-accent); font-weight: 500; }
+@keyframes ax-fade { from { opacity: 0; } }
+@keyframes ax-pop { from { transform: scale(0.94) translateY(8px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .ax-collage-tile, .ax-collage-wall { animation: none; transition: none; } }
